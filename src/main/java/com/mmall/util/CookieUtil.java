@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * Created by Administrator on 2018/4/27.
  */
 public class CookieUtil {
-    private final static String COOKIE_DOMAIN=".happymmall.com";
+    private final static String COOKIE_DOMAIN=".fuzai.com";
     private final static String COOKIE_NAME="mmall_login_token";
     private final static Logger logger= LoggerFactory.getLogger(CookieUtil.class);
 
@@ -20,7 +20,7 @@ public class CookieUtil {
         Cookie ck=new Cookie(COOKIE_NAME,token);
         ck.setDomain(COOKIE_DOMAIN);
         ck.setPath("/");//代表设置在根目录
-
+        ck.setHttpOnly(true);//防止脚本攻击带来的信息泄露风险  可以让浏览器不把cookie发送给第三方，
         ck.setMaxAge(-1);//如果是-1代表没有期限 ，cookie永久有效
         logger.info("write cookieName:{},cookieValue:{}",ck.getName(),ck.getValue());
         response.addCookie(ck);

@@ -58,7 +58,22 @@ public class RedisPoolUtil {
         return result;
     }
 
-    public static Long get(String key){
+    public static String get(String key){
+        Jedis jedis=null;
+        String result=null;
+        try{
+            jedis=RedisPool.getJedis();
+            result=jedis.get(key);
+        }catch (Exception e){
+            logger.error("set key:{}  error",key,e);
+            RedisPool.returnBrokenResource(jedis);
+            return result;
+        }
+        RedisPool.returnResource(jedis);
+        return result;
+    }
+
+    public static Long del(String key){
         Jedis jedis=null;
         Long result=null;
         try{
