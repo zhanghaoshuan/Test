@@ -11,6 +11,7 @@ import com.mmall.service.IUserService;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
 import com.mmall.util.RedisPoolUtil;
+import com.mmall.util.RedisShardedPoolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class UserController {
         CookieUtil.writeloginToken(httpServletResponse,session.getId());
 //        CookieUtil.readLoginToken(httpServletRequest);
 //        CookieUtil.delLoginToken(httpServletRequest,httpServletResponse);
-        RedisPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),3600);
+        RedisShardedPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),3600);
         return  response;
 
     }
@@ -59,7 +60,7 @@ public class UserController {
     public ServerResponse<String> logout(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse){
         CookieUtil.delLoginToken(httpServletRequest,httpServletResponse);
         String cookieValue=CookieUtil.readLoginToken(httpServletRequest);
-        RedisPoolUtil.del(cookieValue);
+        RedisShardedPoolUtil.del(cookieValue);
         return ServerResponse.createBySuccess("退出成功");
     }
 
@@ -83,7 +84,7 @@ public class UserController {
         if(StringUtils.isEmpty(cookieValue)){
             return ServerResponse.createByErrorMessage("查询不到用户");
         }
-        String userJson=RedisPoolUtil.get(cookieValue);
+        String userJson=RedisShardedPoolUtil.get(cookieValue);
         User user=JsonUtil.String2Obj(userJson, new TypeReference<User>() {});
         if(user==null){
             return ServerResponse.createByErrorMessage("查询不到用户");
@@ -116,7 +117,7 @@ public class UserController {
         if(StringUtils.isEmpty(cookieValue)){
             return ServerResponse.createByErrorMessage("查询不到用户");
         }
-        String userJson=RedisPoolUtil.get(cookieValue);
+        String userJson=RedisShardedPoolUtil.get(cookieValue);
         User user=JsonUtil.String2Obj(userJson, new TypeReference<User>() {});
         if(user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登录，需要强制登录");
@@ -131,7 +132,7 @@ public class UserController {
         if(StringUtils.isEmpty(cookieValue)){
             return ServerResponse.createByErrorMessage("查询不到用户");
         }
-        String userJson=RedisPoolUtil.get(cookieValue);
+        String userJson=RedisShardedPoolUtil.get(cookieValue);
         User currentUser=JsonUtil.String2Obj(userJson, new TypeReference<User>() {});
         if(currentUser==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登录，需要强制登录");
@@ -142,7 +143,7 @@ public class UserController {
         ServerResponse<User> response= iUserService.updateInformation(user);
         if(response.isSuccess()){
             String userJsonStr=JsonUtil.obj2String(response.getData());
-            RedisPoolUtil.setEx(cookieValue,userJsonStr,3600);
+            RedisShardedPoolUtil.setEx(cookieValue,userJsonStr,3600);
 //            session.setAttribute(Const.CURRENT_USER,response.getData());
         }
         return response;
@@ -155,7 +156,7 @@ public class UserController {
         if(StringUtils.isEmpty(cookieValue)){
             return ServerResponse.createByErrorMessage("查询不到用户");
         }
-        String userJson=RedisPoolUtil.get(cookieValue);
+        String userJson= RedisShardedPoolUtil.get(cookieValue);
         User currentUser=JsonUtil.String2Obj(userJson, new TypeReference<User>() {});
         if(currentUser==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登录，需要强制登录");

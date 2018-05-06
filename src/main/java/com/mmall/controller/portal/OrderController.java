@@ -12,6 +12,7 @@ import com.mmall.service.IOrderService;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
 import com.mmall.util.RedisPoolUtil;
+import com.mmall.util.RedisShardedPoolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
@@ -48,7 +49,7 @@ public class OrderController {
         if(StringUtils.isEmpty(cookieValue)){
             return ServerResponse.createByErrorMessage("查询不到用户");
         }
-        String userJson= RedisPoolUtil.get(cookieValue);
+        String userJson= RedisShardedPoolUtil.get(cookieValue);
         User user= JsonUtil.String2Obj(userJson, new TypeReference<User>() {});
         if(user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登录，需要强制登录");
@@ -64,7 +65,7 @@ public class OrderController {
         if(StringUtils.isEmpty(cookieValue)){
             return ServerResponse.createByErrorMessage("查询不到用户");
         }
-        String userJson=RedisPoolUtil.get(cookieValue);
+        String userJson= RedisShardedPoolUtil.get(cookieValue);
         User user=JsonUtil.String2Obj(userJson, new TypeReference<User>() {});
         if(user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登录，需要强制登录");
@@ -80,7 +81,7 @@ public class OrderController {
         if(StringUtils.isEmpty(cookieValue)){
             return ServerResponse.createByErrorMessage("查询不到用户");
         }
-        String userJson=RedisPoolUtil.get(cookieValue);
+        String userJson=RedisShardedPoolUtil.get(cookieValue);
         User user=JsonUtil.String2Obj(userJson, new TypeReference<User>() {});
         if(user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登录，需要强制登录");
@@ -96,7 +97,7 @@ public class OrderController {
         if(StringUtils.isEmpty(cookieValue)){
             return ServerResponse.createByErrorMessage("查询不到用户");
         }
-        String userJson=RedisPoolUtil.get(cookieValue);
+        String userJson=RedisShardedPoolUtil.get(cookieValue);
         User user=JsonUtil.String2Obj(userJson, new TypeReference<User>() {});
         if(user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登录，需要强制登录");
@@ -111,7 +112,7 @@ public class OrderController {
         if(StringUtils.isEmpty(cookieValue)){
             return ServerResponse.createByErrorMessage("查询不到用户");
         }
-        String userJson=RedisPoolUtil.get(cookieValue);
+        String userJson=RedisShardedPoolUtil.get(cookieValue);
         User user=JsonUtil.String2Obj(userJson, new TypeReference<User>() {});
         if(user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登录，需要强制登录");
@@ -127,7 +128,7 @@ public class OrderController {
         if(StringUtils.isEmpty(cookieValue)){
             return ServerResponse.createByErrorMessage("查询不到用户");
         }
-        String userJson=RedisPoolUtil.get(cookieValue);
+        String userJson=RedisShardedPoolUtil.get(cookieValue);
         User user=JsonUtil.String2Obj(userJson, new TypeReference<User>() {});
         if(user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登录，需要强制登录");
@@ -186,7 +187,7 @@ public class OrderController {
         if(StringUtils.isEmpty(cookieValue)){
             return ServerResponse.createByErrorMessage("查询不到用户");
         }
-        String userJson=RedisPoolUtil.get(cookieValue);
+        String userJson=RedisShardedPoolUtil.get(cookieValue);
         User user=JsonUtil.String2Obj(userJson, new TypeReference<User>() {});
         if(user==null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登录，需要强制登录");
