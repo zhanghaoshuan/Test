@@ -29,6 +29,7 @@ import com.mmall.vo.OrderVo;
 import com.mmall.vo.ShippingVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -529,5 +530,29 @@ public class OrderServiceImpl implements IOrderService{
             return ServerResponse.createBySuccess();
         }
         return ServerResponse.createByError();
+    }
+
+    public void closeOrder(int hour){
+        Date closeDateTime= DateUtils.addHours(new Date(),-hour);
+        List<Order> orderList=orderMapper.selectOrderStatusByCreateTime(Const.OrderStatusEnum.NO_PAY.getCode(),DateTimeUtil.dateToStr(closeDateTime));
+        for(Order order :orderList){
+            List<OrderItem> orderItemList=orderItemMapper.getByOrderNo(order.getOrderNo());
+            for(OrderItem orderItem:orderItemList){
+                Integer stock=productMapper.selectStockByProductId(orderItem.getProductId());
+                if(stock==null){
+                    continue;
+                }
+                Product product=new Product();
+                product.setId(orderItem.getProductId());
+                product.setStock(stock+orderItem.getQuantity());
+                productMapper.updateByPrimaryKeySelective(product);
+
+            }
+            orderMapper.closeOrderByOrderId(order.getId());
+
+
+        }
+
+
     }
 }

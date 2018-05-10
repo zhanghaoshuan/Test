@@ -1,8 +1,10 @@
 package com.mmall.util;
 
+import com.mmall.common.RedisPool;
 import com.mmall.common.RedisShardPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ShardedJedis;
 
 /**
@@ -92,6 +94,21 @@ public class RedisShardedPoolUtil {
             RedisShardPool.returnResource(jedis);
             return result;
         }
+
+    public static Long setnx(String key,String value){
+        Jedis jedis=null;
+        Long result=null;
+        try{
+            jedis= RedisPool.getJedis();
+            result=jedis.setnx(key, value);
+        }catch (Exception e){
+            logger.error("set key:{} value:{} error",key,value,e);
+            RedisPool.returnBrokenResource(jedis);
+            return result;
+        }
+        RedisPool.returnResource(jedis);
+        return result;
+    }
 
 //    public static void main(String[] args) {
 //        Jedis jedis=RedisShardPool.getJedis();
