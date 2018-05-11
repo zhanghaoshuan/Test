@@ -110,6 +110,21 @@ public class RedisShardedPoolUtil {
         return result;
     }
 
+    public static String getset(String key,String value){
+        Jedis jedis=null;
+        String result=null;
+        try{
+            jedis= RedisPool.getJedis();
+            result=jedis.getSet(key, value);
+        }catch (Exception e){
+            logger.error("getSet key:{} value:{} error",key,value,e);
+            RedisPool.returnBrokenResource(jedis);
+            return result;
+        }
+        RedisPool.returnResource(jedis);
+        return result;
+    }
+
 //    public static void main(String[] args) {
 //        Jedis jedis=RedisShardPool.getJedis();
 //        RedisShardPoolUtil.set("keyTest","value");
