@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
-/**
- * Created by geely
- */
+
 
 @Controller
 @RequestMapping("/manage/order")
